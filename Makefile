@@ -5,3 +5,6 @@ run-parus: parus paren.input
 
 parus: lib.rs *.rs parse/*.rs
 	rustc lib.rs
+
+clean:
+	rm -f parus paren.out
