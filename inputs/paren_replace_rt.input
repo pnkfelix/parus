@@ -1,0 +1,38 @@
+// #!lang parus
+#[no_std]; // turn this on if cfg(not(easy)).
+
+#[allow(dead_code)];
+
+fn main() {
+    go()
+}
+
+#[cfg(easy)]
+fn go() {
+    for c in ("Hello World\n").bytes() {
+        unsafe {
+            putchar(c as i32);
+        }
+    }
+    // println!("and Hello World");
+}
+
+extern "C" { fn putchar(c:i32) -> i32; }
+
+#[cfg(not(easy))]
+mod dumb_rt;
+
+#[cfg(not(easy))]
+fn go() {
+    unsafe {
+        putchar('H' as i32);
+        putchar('i' as i32);
+        putchar('\n' as i32);
+    }
+}
+
+#[no_mangle]      // - this is called from C code
+#[no_split_stack] // - it would be sad for this function to trigger __morestack
+pub extern "C" fn rust_stack_exhausted() {
+    dumb_rt::rust_stack_exhausted()
+}

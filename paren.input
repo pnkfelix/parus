@@ -1,0 +1,26 @@
+#!lang parus
+
+use std::fmt;
+
+fn main() {
+    go()
+}
+
+fn go() {
+    for c in ("Hello World\n").bytes() {
+        unsafe {
+            putchar(c as i32);
+        }
+    }
+    println!("and Hello World {}", Origin("from", "me"));
+}
+
+extern "C" { fn putchar(c:i32) -> i32; }
+
+struct Origin(&'static str, &'static str);
+
+impl fmt::Default for Origin {
+    fn fmt(&Origin(x,y): &Origin, f: &mut fmt::Formatter) {
+        write!(f.buf, "({}, {})", x, y);
+    }
+}
